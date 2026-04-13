@@ -290,4 +290,3 @@ pytrends>=4.9
 
 ---
 
-*Assessment submitted for HardScope Lead Analyst, Creator Strategy & ROI role.*
