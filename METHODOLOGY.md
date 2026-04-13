@@ -1,4 +1,4 @@
-# HardScope Assessment — Full Methodology & Replication Guide
+# HardScope Assessment : Full Methodology & Replication Guide
 **Author:** Sachin  
 **Assessment:** Lead Analyst, Creator Strategy & ROI — Measurement Challenge  
 **Brand Chosen:** Riot Games / VALORANT  
@@ -7,11 +7,12 @@
 ---
 
 ## How to Use This Document
-This file documents every decision, API call, transformation, and assumption made in this project — in enough detail that you can replicate each step manually, explain it in an interview, or hand it to a teammate. Each stage ends with a "How to Replicate" section.
+
+This file documents every decision, API call, transformation, and assumption made in this project — in enough detail that you can replicate each step manually or hand it to a teammate. 
 
 ---
 
-# STAGE 1 — Data Collection via YouTube Data API v3
+# STAGE 1 : Data Collection via YouTube Data API v3
 
 ## Why This Data Source?
 
@@ -39,7 +40,7 @@ The assessment asks for data from a "legitimate source" and lists **platform API
 
 ---
 
-## API Call 1 — Discover Creator Channels
+## API Call 1 : Discover Creator Channels
 
 **Purpose:** Confirm which channels are actively producing VALORANT content in 2024.
 
@@ -76,7 +77,7 @@ https://www.googleapis.com/youtube/v3/search?part=snippet&q=valorant+gameplay&ty
 
 ---
 
-## API Call 2 — Channel Statistics (Real Subscriber + View Counts)
+## API Call 2 : Channel Statistics (Real Subscriber + View Counts)
 
 **Purpose:** Get ground-truth subscriber counts, lifetime view totals, and video counts for our selected creators.
 
@@ -114,7 +115,7 @@ GET https://www.googleapis.com/youtube/v3/channels
 
 ---
 
-## API Call 3 — Q4 2024 Video IDs Per Creator
+## API Call 3 : Q4 2024 Video IDs Per Creator
 
 **Purpose:** Find all videos each creator published between October 1 and December 31, 2024.
 
@@ -137,7 +138,7 @@ https://www.googleapis.com/youtube/v3/search?part=id&channelId=UCckPYr9b_iVucz8I
 
 ---
 
-## API Call 4 — Video-Level Statistics (Views, Likes, Comments)
+## API Call 4 : Video-Level Statistics (Views, Likes, Comments)
 
 **Purpose:** Get the actual performance numbers for each video — the core dataset.
 
@@ -161,7 +162,7 @@ GET https://www.googleapis.com/youtube/v3/videos?part=statistics,snippet,content
 
 ---
 
-## Stage 1 — Total API Quota Used
+## Stage 1 : Total API Quota Used
 
 | Call | Units Used |
 |---|---|
@@ -175,7 +176,7 @@ No cost incurred. Free tier is more than sufficient.
 
 ---
 
-## Stage 1 — Limitations
+## Stage 1 : Limitations
 
 1. **We sampled 10 videos per creator** — not every video they posted in Q4. For production, paginate and store all video IDs.
 2. **Views accumulate over time** — a video posted Oct 1 has had 3 months to accumulate views; one posted Dec 30 has had days. Normalized by views/day in Stage 2.
@@ -184,7 +185,7 @@ No cost incurred. Free tier is more than sufficient.
 
 ---
 
-# STAGE 2 — Measurement Framework & Feature Engineering
+# STAGE 2 : Measurement Framework & Feature Engineering
 
 ## The 3-Layer Framework
 
@@ -298,7 +299,7 @@ Outputs:
 
 ---
 
-# STAGE 3 — Analysis Dashboard
+# STAGE 3 : Analysis Dashboard
 
 ## Deliverables
 
@@ -334,7 +335,7 @@ jupyter notebook notebooks/03_analysis_dashboard.ipynb
 
 ---
 
-# STAGE 4 — QBR Deck
+# STAGE 4 : QBR Deck
 
 ## Slide Architecture
 
@@ -353,7 +354,7 @@ Slide 6 is a deliberate addition — reviewers trust a framework more when its l
 
 ---
 
-# STAGE 5 — Executive Summary
+# STAGE 5 : Executive Summary
 
 The executive summary (`outputs/Executive_Summary.docx`) is a 2-page narrative for a CMO or Head of Agency who won't open the deck. Answers five questions:
 
@@ -367,27 +368,7 @@ Every CPE figure in the DOCX is flagged with ⚠ MODELLED. Section 6 "Known Limi
 
 ---
 
-# ARCHITECTURE DECISIONS — Interview Q&A
-
-## Q: Why YouTube API v3 and not a third-party tool like Social Blade?
-
-YouTube API v3 is the primary, authoritative source. Every number is directly verifiable — any interviewer can copy the URL and get the same result. Third-party tools aggregate and sometimes estimate data; using the API shows you went to the actual source, not an intermediary.
-
-## Q: Why Google Trends as the contextual layer?
-
-It explains macro-level shifts in audience interest that are completely outside creator control. Without it, you'd penalise creators for a 44% Q4 category headwind they had no ability to influence. The Trends column transforms the analysis from "blame the creator" to "understand the environment."
-
-## Q: Why model spend with benchmarks instead of leaving it blank?
-
-A CPE analysis with no spend data is incomplete. Using benchmarks allows the analysis to demonstrate the methodology; the actual numbers can be plugged in later. Flagging it as modelled is critical — anyone using this for a real budget decision should replace these numbers with actuals.
-
-## Q: Why normalize TenZ's Q3 ER instead of excluding him entirely?
-
-Excluding TenZ entirely would give a false picture of the programme. Normalizing (removing one viral video) allows a fair Q3-vs-Q4 comparison of his genuine branded content output. The viral video is a separate business opportunity, not a baseline.
-
----
-
-# STAGE 6 — Known Limitations & Honest Assessment
+# STAGE 6 : Known Limitations & Honest Assessment
 
 This stage documents what the framework **cannot** claim, and what evidence would be required to make stronger assertions.
 
@@ -455,24 +436,5 @@ Missing from the Consideration layer:
 - Game downloads / player reactivation (requires Riot's internal attribution model)
 - Brand lift / purchase intent survey
 
-**Cheapest fix:** Unique discount codes per creator (e.g., `TENZ10` in the video description), tracked against Riot's redemption data. Day 1 fix, near-zero cost to implement.
-
 ---
 
-## Interview Prep: Anticipated Questions
-
-### "Is this true incrementality?"
-
-No. ΔER is a period-over-period comparison, not causal attribution. True incrementality requires a geo-holdout test or propensity score matched design. With public API data only, we can identify directional trends but cannot prove cause-and-effect.
-
-### "Why should I trust your CPE numbers if spend is estimated?"
-
-The absolute values shouldn't be trusted — but the relative ranking is useful. If the estimates are roughly correct, aceu's CPE being 5× higher than tarik's is a real signal worth investigating. Replace benchmark estimates with actual contract rates to validate the ranking.
-
-### "What would you do differently if you had the data?"
-
-Three things immediately: (1) real spend data per creator per month, (2) unique discount codes for lower-funnel conversion tracking, and (3) Twitch concurrent viewer data to extend beyond YouTube. These three changes would turn this from a directional analysis into a defensible ROI model.
-
----
-
-*End of METHODOLOGY.md*
