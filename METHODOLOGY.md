@@ -7,12 +7,6 @@
 
 ---
 
-## How to Use This Document
-
-This file documents every decision, API call, transformation, and assumption made in this project
-in enough detail that can be replicated or hand it to a teammate. 
----
-
 # STAGE 1 -- Data Collection via YouTube Data API v3
 
 ## Why This Data Source?
