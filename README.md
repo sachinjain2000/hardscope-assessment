@@ -302,7 +302,7 @@ The framework flags four conditions automatically (see `data/modeled/flagging_al
 - [x] All raw data files committed to `data/raw/`
 - [x] `fetch_trends.py` documented and runnable locally
 - [x] YouTube API pull instructions in `notebooks/01_data_collection.ipynb`
-- [x] All transformations in notebook cells (no hidden magic)
+- [x] All transformations in notebook cells
 - [x] `METHODOLOGY.md` documents every decision with "How to Replicate" sections
 - [x] `PLAYBOOK.md` provides a brand-agnostic template for reuse
 - [x] Outputs regenerate cleanly from raw data with `jupyter nbconvert --execute`
@@ -323,5 +323,3 @@ pptxgenjs (Node.js, for PPTX deck — see outputs/)
 ```
 
 ---
-
-*Assessment submitted for HardScope Lead Analyst, Creator Strategy & ROI role.*
