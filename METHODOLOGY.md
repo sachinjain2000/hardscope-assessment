@@ -8,9 +8,7 @@
 
 ## How to Use This Document
 This file documents every decision, API call, transformation, and assumption made in this project
-in enough detail that you can replicate each step manually, explain it in an interview, or hand
-it to a teammate. Each stage ends with a "How to Replicate" section.
-
+in enough detail that can be replicated or hand it to a teammate. 
 ---
 
 # STAGE 1 -- Data Collection via YouTube Data API v3
@@ -24,7 +22,6 @@ Using the YouTube Data API v3 is the strongest possible choice because:
 - Every number is directly reproducible by anyone with an API key
 - It gives us video-level granularity: views, likes, comments, publish date, duration per video
 - It is free (10,000 quota units/day -- more than enough for this analysis)
-- It shows resourcefulness: you went to the source, not to a pre-packaged dataset
 
 ## Why VALORANT?
 
@@ -362,45 +359,3 @@ Without these, CPE measures the cost of engagement, not the cost of consideratio
 
 ---
 
-# ARCHITECTURE DECISIONS -- Interview Q&A
-
-## Why YouTube API v3 and not a third-party tool?
-
-The assessment values "legitimate sources" and lists platform APIs first. YouTube API v3 is the
-authoritative, reproducible, free source. Any interviewer can copy the URL and get the same result.
-
-## Why Google Trends as the contextual layer?
-
-Free and publicly available. Explains macro-level shifts outside creator control. Without it,
-you'd penalise creators for a 44% Q4 category headwind they had no ability to influence.
-
-## Why model spend with benchmarks?
-
-A CPE analysis with no spend data is incomplete. Using benchmarks allows the analysis to
-demonstrate the methodology. Flagging it as modelled is critical for any real budget decision.
-
-## Why normalize TenZ's Q3 ER instead of excluding him?
-
-Excluding TenZ entirely gives a false picture. Normalizing (removing one viral video) allows
-comparison of his genuine content performance across the two quarters. The viral video is a
-separate event, not a reliable baseline for branded content output.
-
-## If asked: "You said incrementality -- is this true incrementality?"
-
-No, and I'd say that directly. Delta ER is a period-over-period comparison, not causal lift.
-True incrementality requires a holdout study. What the delta ER *does* tell you: tarik improved
-against his own baseline during a period when every other creator declined and the category fell
-44%. That directionality is credible. The right follow-up is a Q1 2025 geo-holdout test.
-
-## What would you do with a real budget?
-
-1. Replace modelled spend with actual contract rates (changes CPE materially)
-2. Add tier-adjusted benchmarks (sharpens leaderboard precision)
-3. Connect Twitch + X impression data (multi-platform reach view)
-4. Build a geo-holdout for Q1 2025 (true incrementality)
-5. Run comment sentiment analysis (VADER) to qualify QEI further
-6. Automate the full pipeline with GitHub Actions on a weekly refresh cadence
-
----
-
-*End of METHODOLOGY.md*
