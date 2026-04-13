@@ -271,7 +271,7 @@ The framework flags four conditions automatically (see `data/modeled/flagging_al
 - [x] All raw data files committed to `data/raw/`
 - [x] `fetch_trends.py` documented and runnable locally
 - [x] YouTube API pull instructions in `notebooks/01_data_collection.ipynb`
-- [x] All transformations in `run_pipeline.py` (no hidden magic)
+- [x] All transformations in `run_pipeline.py` 
 - [x] `METHODOLOGY.md` documents every decision with "How to Replicate" sections
 - [x] `PLAYBOOK.md` provides a brand-agnostic template for reuse
 - [x] Outputs regenerate cleanly from raw data: `python run_pipeline.py`
