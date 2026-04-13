@@ -257,4 +257,3 @@ Note: pytrends 4.9.2 + urllib3 2.x requires method_whitelist->allowed_methods pa
 
 ---
 
-*This playbook was built for the HardScope Lead Analyst assessment and is designed to be hand-off-ready for a brand or agency team.*
