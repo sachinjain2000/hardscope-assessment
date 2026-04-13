@@ -1,7 +1,5 @@
 # HardScope Assessment -- Full Methodology & Replication Guide
 
-**Author:** Sachin Jain
-**Assessment:** Lead Analyst, Creator Strategy & ROI -- Measurement Challenge
 **Brand Chosen:** Riot Games / VALORANT
 **Campaign Period:** Q4 2024 (October - December 2024)
 
