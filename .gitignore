@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+*.egg-info/
+dist/
+build/
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Node
+node_modules/
+package-lock.json
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Data — raw daily Trends file (large, optional)
+# data/raw/search_interest.csv  # Uncomment to exclude
+
+# Credentials
+*.key
+api_key.txt
+.env*

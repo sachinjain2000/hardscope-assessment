@@ -1,0 +1,21 @@
+creator,month,alert_type,detail
+Kyedae,2024-08,CPE Overrun,CPE $3.54 exceeds $0.25 ceiling
+Kyedae,2024-09,CPE Overrun,CPE $0.78 exceeds $0.25 ceiling
+Kyedae,2024-12,Declining ER,ER dropped 1.69pp MoM
+Kyedae,2024-12,CPE Overrun,CPE $0.53 exceeds $0.25 ceiling
+Protatomonster,2024-09,High Volume / Low Quality,"727,230 views but ER only 1.82%"
+Protatomonster,2024-09,Below Platform Average,ER 1.82% < 50% of 3.87% benchmark
+Protatomonster,2024-09,CPE Overrun,CPE $0.53 exceeds $0.25 ceiling
+Protatomonster,2024-12,High Volume / Low Quality,"739,340 views but ER only 1.77%"
+Protatomonster,2024-12,Below Platform Average,ER 1.77% < 50% of 3.87% benchmark
+Protatomonster,2024-12,CPE Overrun,CPE $0.53 exceeds $0.25 ceiling
+Sinatraa,2024-09,CPE Overrun,CPE $0.54 exceeds $0.25 ceiling
+Sinatraa,2024-12,Declining ER,ER dropped 1.37pp MoM
+Sinatraa,2024-12,CPE Overrun,CPE $0.86 exceeds $0.25 ceiling
+TenZ,2024-12,Declining ER,ER dropped 1.58pp MoM
+TenZ,2024-12,CPE Overrun,CPE $0.44 exceeds $0.25 ceiling
+aceu,2024-09,CPE Overrun,CPE $1.86 exceeds $0.25 ceiling
+aceu,2024-10,CPE Overrun,CPE $2.42 exceeds $0.25 ceiling
+tarik,2024-08,CPE Overrun,CPE $2.46 exceeds $0.25 ceiling
+tarik,2024-09,Declining ER,ER dropped 0.68pp MoM
+tarik,2024-09,CPE Overrun,CPE $0.28 exceeds $0.25 ceiling
