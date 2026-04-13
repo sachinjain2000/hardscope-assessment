@@ -1,146 +1,198 @@
-# HardScope Assessment -- Full Methodology & Replication Guide
-
-**Brand Chosen:** Riot Games / VALORANT
-
-**Campaign Period:** Q4 2024 (October - December 2024)
+# HardScope Assessment — Full Methodology & Replication Guide
+**Author:** Sachin  
+**Assessment:** Lead Analyst, Creator Strategy & ROI — Measurement Challenge  
+**Brand Chosen:** Riot Games / VALORANT  
+**Campaign Period:** Q4 2024 (October – December 2024)
 
 ---
 
-# STAGE 1 : Data Collection via YouTube Data API v3
+## How to Use This Document
+This file documents every decision, API call, transformation, and assumption made in this project — in enough detail that you can replicate each step manually, explain it in an interview, or hand it to a teammate. Each stage ends with a "How to Replicate" section.
+
+---
+
+# STAGE 1 — Data Collection via YouTube Data API v3
 
 ## Why This Data Source?
 
-The assessment asks for data from a "legitimate source" and lists platform APIs as the top example.
-Using the YouTube Data API v3 is the strongest possible choice because:
+The assessment asks for data from a "legitimate source" and lists **platform APIs** as the top example. Using the YouTube Data API v3 is the strongest possible choice because:
 
-- It is the primary, authoritative source -- not a third-party scrape or aggregator
-- Every number is directly reproducible by anyone with an API key
-- It gives us video-level granularity: views, likes, comments, publish date, duration per video
-- It is free (10,000 quota units/day -- more than enough for this analysis)
+- It is the **primary, authoritative source** — not a third-party scrape or aggregator
+- Every number is **directly reproducible** by anyone with an API key
+- It gives us **video-level granularity**: views, likes, comments, publish date, duration per video
+- It is **free** (10,000 quota units/day — more than enough for this analysis)
+- It shows **resourcefulness**: you went to the source, not to a pre-packaged dataset
 
 ## Why VALORANT?
 
-- Gaming is the #1 content category on YouTube by volume -> richest available creator data
-- Riot Games has a documented Creator Partner Program (launched in closed beta 2024)
-- The VALORANT creator ecosystem has clearly defined tiers: macro pros, mid-tier educators, micro entertainers
+- Gaming is the **#1 content category on YouTube** by volume → richest available creator data
+- Riot Games has a documented **Creator Partner Program** (launched in closed beta 2024) → this is a real, named program, not a hypothetical
+- The VALORANT creator ecosystem has clearly defined **tiers of creators** (macro pros, mid-tier educators, micro entertainers) → ideal for a multi-tier measurement framework
+- HardScope focuses on creator ROI for media brands — gaming brands are a primary client archetype
 
 ## Campaign Framing
 
-> Simulated Program: Riot Games VALORANT Q4 2024 Creator Activation
-> Objective: Drive player reactivation and new player acquisition around Episode 9 Act 3 launch
-> Creators Measured: 6 active YouTube creators across Macro and Mid-Tier segments
-> Period: October 1 - December 31, 2024
+> **Simulated Program:** Riot Games VALORANT Q4 2024 Creator Activation  
+> **Objective:** Drive player reactivation and new player acquisition around Episode 9 Act 3 launch  
+> **Creators Measured:** 6 active YouTube creators across Macro and Mid-Tier segments  
+> **Period:** October 1 – December 31, 2024
 
 ---
 
-## API Call 1 : Discover Creator Channels
+## API Call 1 — Discover Creator Channels
 
-Endpoint: GET https://www.googleapis.com/youtube/v3/search
-Parameters: q="valorant gameplay", type=channel, maxResults=20, order=relevance
+**Purpose:** Confirm which channels are actively producing VALORANT content in 2024.
 
-Full URL:
+**Endpoint:**
+```
+GET https://www.googleapis.com/youtube/v3/search
+```
+
+**Parameters:**
+```
+q             = "valorant gameplay"
+type          = channel
+maxResults    = 20
+order         = relevance
+key           = YOUR_API_KEY
+```
+
+**Full URL (paste into browser or curl):**
+```
 https://www.googleapis.com/youtube/v3/search?part=snippet&q=valorant+gameplay&type=channel&maxResults=20&order=relevance&key=YOUR_API_KEY
+```
 
-Quota cost: 100 units
+**How to replicate manually:**
+1. Go to https://console.cloud.google.com
+2. Create a project → Enable "YouTube Data API v3" → Create an API Key
+3. Paste the URL above into your browser (replace YOUR_API_KEY)
+4. You'll get a JSON response — look for `items[].snippet.channelId` and `items[].snippet.channelTitle`
+
+**What we got:**
+- 20 channels including: Rawzu, Valorant DAILY, VALORANT Pro Player POVs, Protatomonster, tarik, Sinatraa, VCT Americas, and others
+- Used this to **confirm the active creator landscape** and select targets for deeper analysis
+
+**Quota cost:** 100 units (1 search call)
 
 ---
 
-## API Call 2 : Channel Statistics
+## API Call 2 — Channel Statistics (Real Subscriber + View Counts)
 
-Endpoint: GET https://www.googleapis.com/youtube/v3/channels
-Parameters: part=snippet,statistics, id=[comma-separated channel IDs]
+**Purpose:** Get ground-truth subscriber counts, lifetime view totals, and video counts for our selected creators.
 
-Channel IDs Used:
+**Endpoint:**
+```
+GET https://www.googleapis.com/youtube/v3/channels
+```
+
+**Channel IDs Used:**
 | Creator | Channel ID |
-|---------|-----------|
+|---|---|
 | TenZ | UCckPYr9b_iVucz8ID1Q67sw |
 | tarik | UCTbtlMEiBfs0zZLQyJzR0Uw |
 | Kyedae | UCxjdy5n9BxX_6RTL8Dt_7pg |
 | aceu | UCBugd2yQNL4TNwHdA56GdnA |
 | Sinatraa | UCABUGfcFJhffRFZxSl-mIiw |
 | Protatomonster | UCdlvbGGgwfF97wlH7rC8Qng |
+| VALORANT Official | UC8CX0LD98EDXl4UYX1MDCXg |
+| VCT Americas | UCifCesg-EUkjKyQedaB3hRg |
 
-Quota cost: 8 units (1 per channel batch)
+**Real data returned (verified live, April 2026):**
 
----
+| Creator | Subscribers | Lifetime Views | Videos |
+|---|---|---|---|
+| TenZ | 2,720,000 | 415,290,284 | 1,018 |
+| tarik | 1,020,000 | 488,883,725 | 2,387 |
+| Kyedae | 1,460,000 | 377,997,382 | 267 |
+| aceu | 1,830,000 | 414,683,273 | 1,086 |
+| Sinatraa | 512,000 | 159,902,146 | 987 |
+| Protatomonster | 870,000 | 629,488,990 | 2,527 |
+| VALORANT Official | 2,890,000 | 864,441,384 | 664 |
+| VCT Americas | 284,000 | 94,852,014 | 2,423 |
 
-## API Call 3 : Video Search Per Creator
-
-Endpoint: GET https://www.googleapis.com/youtube/v3/search
-Parameters: channelId={id}, publishedAfter=2024-10-01T00:00:00Z,
-            publishedBefore=2024-12-31T23:59:59Z, type=video, maxResults=10
-
-Example URL:
-https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UCckPYr9b_iVucz8ID1Q67sw&type=video&publishedAfter=2024-10-01T00:00:00Z&publishedBefore=2024-12-31T23:59:59Z&maxResults=10&key=YOUR_API_KEY
-
-Quota cost: 100 units per call, 600 total for 6 creators
-
----
-
-## API Call 4 : Video Statistics
-
-Endpoint: GET https://www.googleapis.com/youtube/v3/videos
-Parameters: part=statistics,contentDetails, id={comma-separated video IDs}
-
-Returns: viewCount, likeCount, commentCount (from statistics)
-         duration (from contentDetails, ISO 8601 format e.g. PT11M46S)
-
-Quota cost: 1 unit per batch of up to 50 video IDs
+**Quota cost:** 8 units (1 unit per channel)
 
 ---
 
-## Data Collection Results
+## API Call 3 — Q4 2024 Video IDs Per Creator
 
-| Quarter | Videos | Creators | Date Range |
-|---------|--------|---------|-----------| 
-| Q3 2024 | 55 | 5 | Jul-Sep 2024 |
-| Q4 2024 | 57 | 6 | Oct-Dec 2024 |
-| Total   | 112 | 6 | Jul-Dec 2024 |
+**Purpose:** Find all videos each creator published between October 1 and December 31, 2024.
 
-## Total API Quota Used
+**Full URL example for TenZ:**
+```
+https://www.googleapis.com/youtube/v3/search?part=id&channelId=UCckPYr9b_iVucz8ID1Q67sw&type=video&order=date&publishedAfter=2024-10-01T00:00:00Z&publishedBefore=2024-12-31T23:59:59Z&maxResults=20&key=YOUR_API_KEY
+```
 
-| Call | Units |
-|------|-------|
+**What we got:**
+| Creator | Q4 2024 Videos Found |
+|---|---|
+| TenZ | 10 (sampled from 20+) |
+| tarik | 10 (sampled from 20+) |
+| Kyedae | 10 (sampled from 20+) |
+| aceu | 7 (lower output in Q4) |
+| Sinatraa | 10 (sampled from 20+) |
+| Protatomonster | 10 (sampled from 20+) |
+
+**Quota cost:** ~100 units per creator × 6 = ~600 units
+
+---
+
+## API Call 4 — Video-Level Statistics (Views, Likes, Comments)
+
+**Purpose:** Get the actual performance numbers for each video — the core dataset.
+
+**Endpoint:**
+```
+GET https://www.googleapis.com/youtube/v3/videos?part=statistics,snippet,contentDetails&id=[VIDEO_IDs]&key=YOUR_API_KEY
+```
+
+**Summary by creator (Q4 2024):**
+
+| Creator | Tier | Q4 Videos | Total Views | ER% |
+|---|---|---|---|---|
+| TenZ | Macro | 10 | 1,919,571 | 2.93% |
+| tarik | Macro | 10 | 2,296,493 | **4.45%** |
+| Kyedae | Macro | 10 | 1,619,831 | 2.56% |
+| aceu | Macro | 7 | 413,863 | 2.79% |
+| Sinatraa | Mid-Tier | 10 | 354,135 | 2.63% |
+| Protatomonster | Mid-Tier | 10 | 739,340 | 1.77% |
+
+**Quota cost:** ~6 units (1 per batch of 50 videos)
+
+---
+
+## Stage 1 — Total API Quota Used
+
+| Call | Units Used |
+|---|---|
 | Channel search | 100 |
 | Channel statistics | 8 |
-| Video search (x6 creators, 2 quarters) | 1200 |
+| Video search (×6 creators) | 600 |
 | Video statistics | 6 |
-| Total | ~1314 / 10,000 daily limit |
+| **Total** | **~714 / 10,000 daily limit** |
 
 No cost incurred. Free tier is more than sufficient.
 
 ---
 
-## Stage 1 : Limitations to Disclose
+## Stage 1 — Limitations
 
-1. Sampled 10 videos per creator per search -- not every video published. A production pipeline
-   would paginate and store all video IDs.
-2. Views accumulate over time -- recency bias in raw view counts. Addressed in Stage 2 by
-   normalizing by days-since-publish.
-3. No impression data or CTR -- YouTube only exposes this inside YouTube Studio (requires
-   channel owner OAuth). Views used as awareness proxy.
-4. No spend data -- Riot's actual creator spend is not public. Modelled from industry benchmarks
-   in Stage 2, clearly labelled as "modelled".
+1. **We sampled 10 videos per creator** — not every video they posted in Q4. For production, paginate and store all video IDs.
+2. **Views accumulate over time** — a video posted Oct 1 has had 3 months to accumulate views; one posted Dec 30 has had days. Normalized by views/day in Stage 2.
+3. **We don't have impression data or CTR** — only accessible inside YouTube Studio (requires channel owner OAuth).
+4. **No spend data** — Riot's actual creator spend is not public. Modelled from IMH 2024 benchmarks, clearly labelled.
 
 ---
 
-# STAGE 2 : Measurement Framework & Feature Engineering
+# STAGE 2 — Measurement Framework & Feature Engineering
 
 ## The 3-Layer Framework
 
 ```
-Awareness  ->  Engagement  ->  Consideration / ROI
+Awareness  →  Engagement  →  Consideration / ROI
 ```
 
-This structure maps creator outputs to business outcomes:
-- Awareness = reach (easy to inflate, easy to buy)
-- Engagement = audience quality (harder to fake)
-- Consideration = spend efficiency (requires spend data)
-
-## Feature 1: Duration Parsing -> Content Type
-
-Input: ISO 8601 duration string (e.g. PT11M46S)
-Output: Seconds -> Short (<2min) / Mid-form (2-20min) / Long-form (>20min)
+## Feature 1: Duration Parsing → Content Type
 
 ```python
 def parse_duration_seconds(iso_str):
@@ -150,13 +202,17 @@ def parse_duration_seconds(iso_str):
     return (int(h.group(1)) if h else 0) * 3600 + \
            (int(m.group(1)) if m else 0) * 60 + \
            (int(s.group(1)) if s else 0)
+
+def classify_content_type(seconds):
+    if seconds < 120:    return 'Short'
+    elif seconds <= 1200: return 'Mid-form'
+    else:                 return 'Long-form'
 ```
 
 ## Feature 2: Views/Day (Velocity Normalization)
 
-Analysis date: January 15, 2025 (fixed for reproducibility)
-
 ```python
+ANALYSIS_DATE = date(2025, 1, 15)
 videos['days_since_publish'] = (pd.Timestamp(ANALYSIS_DATE) - videos['published_date']).dt.days
 videos['views_per_day'] = (videos['views'] / videos['days_since_publish'].clip(lower=1)).round(1)
 ```
@@ -167,7 +223,7 @@ videos['views_per_day'] = (videos['views'] / videos['days_since_publish'].clip(l
 qei = (likes + comments * 3) / views * 100
 ```
 
-The 3x comment weight reflects significantly higher intent vs. likes. Calibrate to your category.
+Comments weighted 3× — requires significantly more intent than a passive like.
 
 ## Feature 4: Reach Index
 
@@ -181,176 +237,242 @@ reach_index = views * (1 + engagement_rate / 100)
 watch_time_hrs = views * duration_seconds * 0.5 / 3600
 ```
 
-Assumes 50% average completion rate. Conservative; gaming content typically runs 55-65%.
+Assumes 50% average completion rate. Conservative; flag in any presentation.
 
 ## Feature 6: CPE Tiers
 
 ```python
-cpe_tier = pd.cut(cpe, bins=[0, 0.11, 0.25, inf], labels=['Efficient', 'Acceptable', 'Review'])
+cpe_tier = pd.cut(cpe, bins=[0, 0.11, 0.25, float('inf')],
+                  labels=['Efficient', 'Acceptable', 'Review'])
 ```
+
+| Tier | CPE Range | Action |
+|------|-----------|--------|
+| Efficient | ≤$0.11 | Scale |
+| Acceptable | $0.11–$0.25 | Renew |
+| Review | >$0.25 | Renegotiate or exit |
+
+## Feature 7: Tier-Adjusted ER Benchmarks
+
+```python
+TIER_ER_BENCHMARKS = {'Mega': 2.0, 'Macro': 3.0, 'Mid': 4.5, 'Micro': 6.0}
+agg['tier_er_benchmark'] = agg['tier'].map(TIER_ER_BENCHMARKS).fillna(3.87)
+agg['er_vs_tier_benchmark'] = (agg['engagement_rate'] / agg['tier_er_benchmark']).round(3)
+```
+
+---
 
 ## The Three Joins
 
-### Join 1: Video data <- Channel stats (subscribers, tier)
+### Join 1: Video data ← Channel stats
 ```python
 videos = videos.merge(channel_stats[['creator','subscribers','tier']], on='creator', how='left')
 ```
-Provides verified subscriber counts (API returned 0 for Protatomonster in one pull; corrected to 870K).
 
-### Join 2: Monthly aggregates <- Google Trends (search interest)
+### Join 2: Monthly aggregates ← Google Trends
 ```python
 monthly = monthly.merge(trends[['month','avg_search_interest']], on='month', how='left')
 ```
-Without this column, Q4 ER compression looks like creator failure. It's a 44% category headwind
-(Q3 avg 65.4 vs Q4 avg 36.7).
+**Why:** Q4 search interest dropped 44% vs Q3 (65.4 → 36.7). Without this column, a reviewer would incorrectly attribute the ER compression entirely to creator failure.
 
-### Join 3: Q4 monthly <- Q3 normalized (incrementality)
+### Join 3: Q4 monthly ← Q3 normalized (incrementality)
 ```python
 incrementality = q3_avg.merge(q4_avg, on='creator')
 incrementality['delta_er_pp'] = incrementality['q4_avg_er'] - incrementality['q3_avg_er']
 ```
 
-**TenZ viral outlier:** The viral Short (7.4M views, Sep 2024) accounts for 78.7% of TenZ's Q3
-impressions. Normalized Q3 ER: 3.58% (vs raw 4.51%). The normalized figure is used for
-incrementality; the outlier is flagged explicitly.
+**TenZ viral outlier handling:** The viral Short (`BiCvVGcuPKE`, 7.4M views) accounts for 78.7% of TenZ's Q3 impressions. Q3 ER raw = 4.51%; normalized (ex-viral) = 3.58%. Normalized figure used for incrementality. Outlier flagged explicitly in PPTX and DOCX.
+
+---
 
 ## How to Replicate Stage 2
 
 ```bash
-cd hardscope-assessment
 python run_pipeline.py
 ```
 
-Generates:
-- data/modeled/creator_campaign_metrics.csv (14 rows x 21 cols)
-- data/modeled/incrementality_q3_q4.csv (6 rows)
-- data/modeled/flagging_alerts.csv (20 alerts)
+Outputs:
+- `data/modeled/creator_campaign_metrics.csv` (14 rows × 21 cols)
+- `data/modeled/incrementality_q3_q4.csv` (6 rows)
+- `data/modeled/flagging_alerts.csv` (20 alerts)
 
 ---
 
-# STAGE 3 : Analysis Dashboard
+# STAGE 3 — Analysis Dashboard
 
-notebooks/03_analysis_dashboard.ipynb covers four Plotly charts:
+## Deliverables
 
-1. Creator Leaderboard -- Q4 ER bar chart, sorted descending, benchmark line at 3.87%
-2. Engagement Trend -- Monthly line chart per creator, Google Trends on secondary Y-axis
-3. Incrementality -- Q3 vs Q4 grouped bars, delta ER annotations
-4. CPE vs ER Scatter -- aceu visible as outlier, tarik as efficiency leader
+| File | Tool | When to Use |
+|------|------|-------------|
+| `outputs/VALORANT_Creator_QBR_Dashboard.xlsx` | Excel / Google Sheets | Shareable link for stakeholders |
+| `notebooks/03_analysis_dashboard.ipynb` | Jupyter + Plotly | Interactive exploration with hover tooltips |
 
----
+**Opening the xlsx in Google Sheets:** sheets.google.com → File → Import → Upload → select .xlsx → "Replace spreadsheet". All 5 tabs, auto-filters, and charts render correctly.
 
-# STAGE 4 : QBR Deck
+## xlsx Dashboard: 5 Tabs
 
-6-slide PPTX (outputs/VALORANT_Creator_QBR_Q3Q4_2024.pptx):
-- Slide 1: Title + Q4 KPI scorecard
-- Slide 2: Creator leaderboard (tier, ER, CPE tier, delta, Q1 action)
-- Slide 3: Key insights (category headwind, viral normalization, tarik signal, aceu problem)
-- Slide 4: 3-layer measurement framework with per-layer known limitations
-- Slide 5: Q1 2025 recommendations + next steps to strengthen the analysis
-- Slide 6: Methodology & known limitations (what can be defended vs. what is estimated)
+| Tab | Contents |
+|-----|----------|
+| 📊 Dashboard | Program KPI cards, 3-layer funnel scorecard (with confidence levels), Q1 budget reallocation |
+| 🏆 Leaderboard | All 6 creators × 15 KPIs, auto-filter, Q3 vs Q4 ER bar chart |
+| 📈 ER Trend | Monthly ER by creator table + line chart (TenZ/tarik/Kyedae vs benchmark) |
+| ⚡ Incrementality | Q3→Q4 delta table + ΔER waterfall chart + tier-adjusted benchmark comparison |
+| 🚨 Alerts | All 20 automated flags with 🔴/🟡/🟢 severity coding and alert summary counts |
 
-VALORANT brand palette: 0F1923 (dark), FF4655 (red), 00D4FF (blue), FFE033 (yellow)
+## What's in Notebook 03
 
----
+`notebooks/03_analysis_dashboard.ipynb` uses Plotly to generate 5 interactive charts:
+1. Creator Leaderboard (Q4 ER bar chart, benchmark line)
+2. Monthly ER Trend (line chart, Google Trends overlay on secondary axis)
+3. Incrementality Bar Chart (Q3 vs Q4 grouped, ΔER annotations)
+4. CPE vs ER Scatter Plot (quadrant lines at ER=3.87% and CPE=$0.25)
+5. Flagging Alerts Summary
 
-# STAGE 5 : Executive Summary
-
-DOCX (outputs/Executive_Summary.docx) covers:
-- Program scorecard with explicit "MODELLED" flags on CPE/spend rows
-- Creator leaderboard with tier column
-- 4 key insights with honest framing of the category headwind and viral normalization
-- Automated alert summary with alert logic documented
-- Q1 recommendations with signal strength ratings
-- Full "Known Limitations" section (see Stage 6 below)
-
----
-
-# STAGE 6 : Known Limitations & Honest Assessment
-
-This section documents what the analysis can and cannot claim. Being explicit about methodology
-gaps is a mark of senior analytical thinking.
+```bash
+jupyter notebook notebooks/03_analysis_dashboard.ipynb
+```
 
 ---
 
-## Limitation 1: "Incrementality" Is a Period-Over-Period Proxy, Not Causal Lift
+# STAGE 4 — QBR Deck
 
-**What the analysis does:** Compares Q4 average ER against Q3 average ER per creator (delta_er_pp).
+## Slide Architecture
 
-**What true incrementality requires:** A counterfactual -- what would have happened in Q4 without
-the creator campaign. Valid methodologies include:
-- Geo-holdout test: run campaign in cities A-C, withhold from D-F; compare brand lift
-- Propensity Score Matching (PSM): match exposed vs. unexposed audiences on demographics
-- Synthetic control: build counterfactual trend from untreated channels
+The 6-slide PPTX (`outputs/VALORANT_Creator_QBR_Q3Q4_2024.pptx`) is built with PptxGenJS:
 
-**Why it matters in an interview:** If asked "how did you measure incrementality?" the correct
-answer is: "I measured period-over-period delta ER as a proxy. True incrementality would require a
-holdout study -- the right next step would be to design a geo-holdout test for Q1 2025."
+| Slide | Title | Purpose |
+|-------|-------|---------|
+| 1 | Title | Campaign context, period, one-line KPI |
+| 2 | Q4 Program Scorecard | Six KPI cards — Views, Engagements, ER, Spend, CPE, Peak ER |
+| 3 | Creator Leaderboard | ER bar chart + ranked table with CPE tier |
+| 4 | Incrementality Deep Dive | Q3 vs Q4 grouped bar chart, 4 findings |
+| 5 | Q1 2025 Recommendations | One action per creator with rationale |
+| 6 | Methodology & Known Limitations | Left: what's defensible. Right: 5 known gaps |
 
-**What delta ER does tell you:** Relative performance change per creator vs. their own baseline,
-during a period when external category factors (Google Trends -44%) affected all creators equally.
-It is a valid comparison signal, just not causal.
-
----
-
-## Limitation 2: CPE Is Modelled, Not Actual
-
-Monthly spend figures are estimated from Influencer Marketing Hub 2024 tier benchmarks:
-
-| Creator | Est. Monthly Spend | Basis |
-|---|---|---|
-| TenZ | $25,000 | IMH Mega-tier range |
-| tarik | $20,000 | IMH Macro-tier range |
-| Kyedae | $22,000 | IMH Macro-tier range |
-| aceu | $28,000 | IMH Macro-tier range |
-| Sinatraa | $8,000 | IMH Mid-tier range |
-| Protatomonster | $7,000 | IMH Mid-tier range |
-
-Real contract rates vary enormously. CPE tiers (Efficient/Acceptable/Review) are directional only.
-The Leaderboard ordering by ER is unaffected. Budget recommendations that depend on CPE require
-actual spend data to validate. Every output in this submission labels CPE figures as "modelled."
+Slide 6 is a deliberate addition — reviewers trust a framework more when its limitations are stated upfront rather than surfaced in Q&A.
 
 ---
 
-## Limitation 3: Tier-Adjusted Benchmarks Not Applied
+# STAGE 5 — Executive Summary
 
-The 3.87% global benchmark (Statista 2024 gaming YouTube) is applied uniformly to all creators.
-ER scales inversely with subscriber count:
+The executive summary (`outputs/Executive_Summary.docx`) is a 2-page narrative for a CMO or Head of Agency who won't open the deck. Answers five questions:
 
-| Tier | Subscriber Range | Expected ER |
-|---|---|---|
-| Mega | >5M | ~1.5-2.5% |
-| Macro | 1M-5M | ~2.5-3.5% |
-| Mid | 500K-1M | ~3.5-5.0% |
+1. What did we set out to do?
+2. What did we spend? *(with MODELLED flag on all CPE figures)*
+3. What worked?
+4. What didn't, and why?
+5. What should we do next?
 
-With tier-adjusted benchmarks:
-- TenZ (3.71% Q4) is ABOVE the Mega-tier ceiling -- a stronger positive signal than it appears
-- Protatomonster (2.54% Q4) is BELOW the Mid-tier floor -- a worse signal than the global view shows
-- aceu (1.23% Q4) is far below any tier -- conclusion unchanged but the underperformance is even larger
-
-Tier data exists in data/channel_stats.csv. Adding a tier_benchmark column is a one-step join.
+Every CPE figure in the DOCX is flagged with ⚠ MODELLED. Section 6 "Known Limitations" mirrors METHODOLOGY.md Stage 6 in condensed form.
 
 ---
 
-## Limitation 4: Watch Time Completion Rate Is Modelled
+# ARCHITECTURE DECISIONS — Interview Q&A
 
-50% completion applied uniformly to all video types. YouTube Shorts (<60s) have completion rates
-above 90% due to auto-loop behaviour. TenZ's 56-second viral Short almost certainly had near-100%
-completion, meaning the 50% model understates his watch time. Long-form videos (>20 min) typically
-run 30-45% completion; 50% may slightly overestimate those creators. Fixing this requires YouTube
-Studio channel-level data (OAuth) -- not available via the public v3 API.
+## Q: Why YouTube API v3 and not a third-party tool like Social Blade?
 
----
+YouTube API v3 is the primary, authoritative source. Every number is directly verifiable — any interviewer can copy the URL and get the same result. Third-party tools aggregate and sometimes estimate data; using the API shows you went to the actual source, not an intermediary.
 
-## Limitation 5: Missing Lower-Funnel Signals
+## Q: Why Google Trends as the contextual layer?
 
-The analysis measures mid-funnel (engagement cost). A complete framework would add:
-- Link-in-bio / Linktree clicks -- direct traffic attribution from creator content
-- Discount / referral code redemptions -- conversion-level attribution
-- VALORANT store page visits attributed to creator (deep link tracking)
-- Survey: unaided awareness + purchase intent among creator audiences (brand lift study)
+It explains macro-level shifts in audience interest that are completely outside creator control. Without it, you'd penalise creators for a 44% Q4 category headwind they had no ability to influence. The Trends column transforms the analysis from "blame the creator" to "understand the environment."
 
-Without these, CPE measures the cost of engagement, not the cost of consideration. The
-"consideration" layer is incomplete.
+## Q: Why model spend with benchmarks instead of leaving it blank?
+
+A CPE analysis with no spend data is incomplete. Using benchmarks allows the analysis to demonstrate the methodology; the actual numbers can be plugged in later. Flagging it as modelled is critical — anyone using this for a real budget decision should replace these numbers with actuals.
+
+## Q: Why normalize TenZ's Q3 ER instead of excluding him entirely?
+
+Excluding TenZ entirely would give a false picture of the programme. Normalizing (removing one viral video) allows a fair Q3-vs-Q4 comparison of his genuine branded content output. The viral video is a separate business opportunity, not a baseline.
 
 ---
 
+# STAGE 6 — Known Limitations & Honest Assessment
+
+This stage documents what the framework **cannot** claim, and what evidence would be required to make stronger assertions.
+
+---
+
+## Limitation 1: ΔER Is Not Causal Incrementality
+
+**What we measure:** Period-over-period change in engagement rate (Q4 ER − Q3 ER).
+
+**What we claim:** "tarik is the only creator showing improvement" — directionally correct.
+
+**What we cannot claim:** That tarik's +1.14pp ΔER was caused by the creator partnership. Alternative explanations: algorithm tailwind, VCT tournament content, audience mix shift, or content format change.
+
+**What would prove it:** A geo-holdout test or propensity score matched market design.
+
+**How to communicate this:** Describe ΔER as a "directional performance signal" or "period-over-period proxy." Never call it "incremental lift" or "causal ROI."
+
+---
+
+## Limitation 2: CPE Is Fully Modelled — No Actual Spend Data
+
+**The spend estimates:**
+
+| Creator | Tier | Est. Monthly Spend | Source |
+|---------|------|-------------------|--------|
+| TenZ | Macro | $25,000 | IMH 2024 Macro benchmark midpoint |
+| tarik | Macro | $20,000 | IMH 2024 Macro benchmark low-end |
+| Kyedae | Macro | $22,000 | IMH 2024 Macro benchmark |
+| aceu | Macro | $28,000 | IMH 2024 Macro benchmark high-end |
+| Sinatraa | Mid-Tier | $8,000 | IMH 2024 Mid-Tier benchmark |
+| Protatomonster | Mid-Tier | $7,000 | IMH 2024 Mid-Tier benchmark low-end |
+
+**What we cannot claim:** That aceu's CPE of $2.42 is real. It could be $0.50 or $5.00 depending on actual contract rates.
+
+**What would fix it:** A spend ingestion template filled in by the brand partnerships team.
+
+---
+
+## Limitation 3: Tier-Adjusted Benchmarks
+
+**Tier-adjusted benchmarks applied in run_pipeline.py:**
+
+| Tier | Expected ER | Source |
+|------|------------|--------|
+| Mega (5M+ subs) | 2.0% | IMH 2024 |
+| Macro (1M–5M) | 3.0% | IMH 2024 |
+| Mid-Tier (500K–1M) | 4.5% | IMH 2024 |
+| Micro (<500K) | 6.0% | IMH 2024 |
+
+Protatomonster's 1.77% looks even worse against the 4.5% Mid-Tier benchmark (–61%) than against the global 3.87% (–54%). The leaderboard ranking is robust either way.
+
+---
+
+## Limitation 4: Watch Time Completion Rate Assumed at 50%
+
+Shorts typically complete at 85–95%; long-form VODs at 10–20%. Total watch time numbers should be treated as order-of-magnitude estimates. Real completion rates require YouTube Analytics OAuth access per creator channel.
+
+---
+
+## Limitation 5: No Lower-Funnel Signals
+
+Missing from the Consideration layer:
+- Link-in-bio clicks (requires Linktree/Beacons API)
+- Discount code redemptions (requires brand partnership data)
+- Game downloads / player reactivation (requires Riot's internal attribution model)
+- Brand lift / purchase intent survey
+
+**Cheapest fix:** Unique discount codes per creator (e.g., `TENZ10` in the video description), tracked against Riot's redemption data. Day 1 fix, near-zero cost to implement.
+
+---
+
+## Interview Prep: Anticipated Questions
+
+### "Is this true incrementality?"
+
+No. ΔER is a period-over-period comparison, not causal attribution. True incrementality requires a geo-holdout test or propensity score matched design. With public API data only, we can identify directional trends but cannot prove cause-and-effect.
+
+### "Why should I trust your CPE numbers if spend is estimated?"
+
+The absolute values shouldn't be trusted — but the relative ranking is useful. If the estimates are roughly correct, aceu's CPE being 5× higher than tarik's is a real signal worth investigating. Replace benchmark estimates with actual contract rates to validate the ranking.
+
+### "What would you do differently if you had the data?"
+
+Three things immediately: (1) real spend data per creator per month, (2) unique discount codes for lower-funnel conversion tracking, and (3) Twitch concurrent viewer data to extend beyond YouTube. These three changes would turn this from a directional analysis into a defensible ROI model.
+
+---
+
+*End of METHODOLOGY.md*
