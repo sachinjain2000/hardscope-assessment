@@ -347,5 +347,3 @@ df = pt.interest_over_time()
 | Category headwind | Decline in search interest that depresses ER independently of creator quality |
 
 ---
-
-*This playbook was built from the ground up for the HardScope Lead Analyst assessment and is designed to be hand-off-ready for a brand or agency team.*
