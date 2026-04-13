@@ -2,7 +2,9 @@
 ### A Reusable Framework for Gaming & Entertainment Brand Teams
 
 **Version:** 1.0
+
 **Based on:** VALORANT Q3-Q4 2024 Creator Campaign Analysis
+
 **Author:** Sachin Jain
 
 ---
