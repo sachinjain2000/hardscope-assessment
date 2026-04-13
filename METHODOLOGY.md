@@ -1,4 +1,5 @@
 # HardScope Assessment -- Full Methodology & Replication Guide
+
 **Author:** Sachin Jain
 **Assessment:** Lead Analyst, Creator Strategy & ROI -- Measurement Challenge
 **Brand Chosen:** Riot Games / VALORANT
@@ -7,6 +8,7 @@
 ---
 
 ## How to Use This Document
+
 This file documents every decision, API call, transformation, and assumption made in this project
 in enough detail that can be replicated or hand it to a teammate. 
 ---
