@@ -1,6 +1,7 @@
 # HardScope Assessment -- Full Methodology & Replication Guide
 
 **Brand Chosen:** Riot Games / VALORANT
+
 **Campaign Period:** Q4 2024 (October - December 2024)
 
 ---
