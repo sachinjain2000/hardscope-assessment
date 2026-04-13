@@ -8,7 +8,8 @@
 
 ## How to Use This Document
 This file documents every decision, API call, transformation, and assumption made in this project
-in enough detail that can be replicated or hand it to a teammate. Each stage ends with a "How to Replicate" section.
+in enough detail that you can replicate each step manually, explain it in an interview, or hand
+it to a teammate. Each stage ends with a "How to Replicate" section.
 
 ---
 
@@ -16,12 +17,14 @@ in enough detail that can be replicated or hand it to a teammate. Each stage end
 
 ## Why This Data Source?
 
+The assessment asks for data from a "legitimate source" and lists platform APIs as the top example.
 Using the YouTube Data API v3 is the strongest possible choice because:
 
 - It is the primary, authoritative source -- not a third-party scrape or aggregator
 - Every number is directly reproducible by anyone with an API key
 - It gives us video-level granularity: views, likes, comments, publish date, duration per video
 - It is free (10,000 quota units/day -- more than enough for this analysis)
+- It shows resourcefulness: you went to the source, not to a pre-packaged dataset
 
 ## Why VALORANT?
 
@@ -97,7 +100,7 @@ Quota cost: 1 unit per batch of up to 50 video IDs
 ## Data Collection Results
 
 | Quarter | Videos | Creators | Date Range |
-|---------|--------|---------|-----------|
+|---------|--------|---------|-----------| 
 | Q3 2024 | 55 | 5 | Jul-Sep 2024 |
 | Q4 2024 | 57 | 6 | Oct-Dec 2024 |
 | Total   | 112 | 6 | Jul-Dec 2024 |
@@ -246,22 +249,158 @@ notebooks/03_analysis_dashboard.ipynb covers four Plotly charts:
 
 # STAGE 4 -- QBR Deck
 
-5-slide PPTX (outputs/VALORANT_Creator_QBR_Q3Q4_2024.pptx):
-- Slide 1: Title slide -- "Creator ROI Review", KPI summary
-- Slide 2: Q4 Program Scorecard -- 6 KPI cards
-- Slide 3: Creator Leaderboard -- ER bar chart + ranked table
-- Slide 4: Incrementality deep dive -- Q3 vs Q4 grouped bars, 4 finding cards
-- Slide 5: Q1 2025 Recommendations -- 5 action cards
+6-slide PPTX (outputs/VALORANT_Creator_QBR_Q3Q4_2024.pptx):
+- Slide 1: Title + Q4 KPI scorecard
+- Slide 2: Creator leaderboard (tier, ER, CPE tier, delta, Q1 action)
+- Slide 3: Key insights (category headwind, viral normalization, tarik signal, aceu problem)
+- Slide 4: 3-layer measurement framework with per-layer known limitations
+- Slide 5: Q1 2025 recommendations + next steps to strengthen the analysis
+- Slide 6: Methodology & known limitations (what can be defended vs. what is estimated)
 
-VALORANT brand palette: 0F1923 (dark), FF4655 (red), 00B37E (green)
+VALORANT brand palette: 0F1923 (dark), FF4655 (red), 00D4FF (blue), FFE033 (yellow)
 
 ---
 
 # STAGE 5 -- Executive Summary
 
-2-page DOCX (outputs/Executive_Summary.docx):
-
-Page 1: Purpose, Q4 KPI snapshot, market context, creator performance table
-Page 2: Measurement framework, key findings, Q1 recommendations, "what next"
+DOCX (outputs/Executive_Summary.docx) covers:
+- Program scorecard with explicit "MODELLED" flags on CPE/spend rows
+- Creator leaderboard with tier column
+- 4 key insights with honest framing of the category headwind and viral normalization
+- Automated alert summary with alert logic documented
+- Q1 recommendations with signal strength ratings
+- Full "Known Limitations" section (see Stage 6 below)
 
 ---
+
+# STAGE 6 -- Known Limitations & Honest Assessment
+
+This section documents what the analysis can and cannot claim. Being explicit about methodology
+gaps is a mark of senior analytical thinking.
+
+---
+
+## Limitation 1: "Incrementality" Is a Period-Over-Period Proxy, Not Causal Lift
+
+**What the analysis does:** Compares Q4 average ER against Q3 average ER per creator (delta_er_pp).
+
+**What true incrementality requires:** A counterfactual -- what would have happened in Q4 without
+the creator campaign. Valid methodologies include:
+- Geo-holdout test: run campaign in cities A-C, withhold from D-F; compare brand lift
+- Propensity Score Matching (PSM): match exposed vs. unexposed audiences on demographics
+- Synthetic control: build counterfactual trend from untreated channels
+
+**Why it matters in an interview:** If asked "how did you measure incrementality?" the correct
+answer is: "I measured period-over-period delta ER as a proxy. True incrementality would require a
+holdout study -- the right next step would be to design a geo-holdout test for Q1 2025."
+
+**What delta ER does tell you:** Relative performance change per creator vs. their own baseline,
+during a period when external category factors (Google Trends -44%) affected all creators equally.
+It is a valid comparison signal, just not causal.
+
+---
+
+## Limitation 2: CPE Is Modelled, Not Actual
+
+Monthly spend figures are estimated from Influencer Marketing Hub 2024 tier benchmarks:
+
+| Creator | Est. Monthly Spend | Basis |
+|---|---|---|
+| TenZ | $25,000 | IMH Mega-tier range |
+| tarik | $20,000 | IMH Macro-tier range |
+| Kyedae | $22,000 | IMH Macro-tier range |
+| aceu | $28,000 | IMH Macro-tier range |
+| Sinatraa | $8,000 | IMH Mid-tier range |
+| Protatomonster | $7,000 | IMH Mid-tier range |
+
+Real contract rates vary enormously. CPE tiers (Efficient/Acceptable/Review) are directional only.
+The Leaderboard ordering by ER is unaffected. Budget recommendations that depend on CPE require
+actual spend data to validate. Every output in this submission labels CPE figures as "modelled."
+
+---
+
+## Limitation 3: Tier-Adjusted Benchmarks Not Applied
+
+The 3.87% global benchmark (Statista 2024 gaming YouTube) is applied uniformly to all creators.
+ER scales inversely with subscriber count:
+
+| Tier | Subscriber Range | Expected ER |
+|---|---|---|
+| Mega | >5M | ~1.5-2.5% |
+| Macro | 1M-5M | ~2.5-3.5% |
+| Mid | 500K-1M | ~3.5-5.0% |
+
+With tier-adjusted benchmarks:
+- TenZ (3.71% Q4) is ABOVE the Mega-tier ceiling -- a stronger positive signal than it appears
+- Protatomonster (2.54% Q4) is BELOW the Mid-tier floor -- a worse signal than the global view shows
+- aceu (1.23% Q4) is far below any tier -- conclusion unchanged but the underperformance is even larger
+
+Tier data exists in data/channel_stats.csv. Adding a tier_benchmark column is a one-step join.
+
+---
+
+## Limitation 4: Watch Time Completion Rate Is Modelled
+
+50% completion applied uniformly to all video types. YouTube Shorts (<60s) have completion rates
+above 90% due to auto-loop behaviour. TenZ's 56-second viral Short almost certainly had near-100%
+completion, meaning the 50% model understates his watch time. Long-form videos (>20 min) typically
+run 30-45% completion; 50% may slightly overestimate those creators. Fixing this requires YouTube
+Studio channel-level data (OAuth) -- not available via the public v3 API.
+
+---
+
+## Limitation 5: Missing Lower-Funnel Signals
+
+The analysis measures mid-funnel (engagement cost). A complete framework would add:
+- Link-in-bio / Linktree clicks -- direct traffic attribution from creator content
+- Discount / referral code redemptions -- conversion-level attribution
+- VALORANT store page visits attributed to creator (deep link tracking)
+- Survey: unaided awareness + purchase intent among creator audiences (brand lift study)
+
+Without these, CPE measures the cost of engagement, not the cost of consideration. The
+"consideration" layer is incomplete.
+
+---
+
+# ARCHITECTURE DECISIONS -- Interview Q&A
+
+## Why YouTube API v3 and not a third-party tool?
+
+The assessment values "legitimate sources" and lists platform APIs first. YouTube API v3 is the
+authoritative, reproducible, free source. Any interviewer can copy the URL and get the same result.
+
+## Why Google Trends as the contextual layer?
+
+Free and publicly available. Explains macro-level shifts outside creator control. Without it,
+you'd penalise creators for a 44% Q4 category headwind they had no ability to influence.
+
+## Why model spend with benchmarks?
+
+A CPE analysis with no spend data is incomplete. Using benchmarks allows the analysis to
+demonstrate the methodology. Flagging it as modelled is critical for any real budget decision.
+
+## Why normalize TenZ's Q3 ER instead of excluding him?
+
+Excluding TenZ entirely gives a false picture. Normalizing (removing one viral video) allows
+comparison of his genuine content performance across the two quarters. The viral video is a
+separate event, not a reliable baseline for branded content output.
+
+## If asked: "You said incrementality -- is this true incrementality?"
+
+No, and I'd say that directly. Delta ER is a period-over-period comparison, not causal lift.
+True incrementality requires a holdout study. What the delta ER *does* tell you: tarik improved
+against his own baseline during a period when every other creator declined and the category fell
+44%. That directionality is credible. The right follow-up is a Q1 2025 geo-holdout test.
+
+## What would you do with a real budget?
+
+1. Replace modelled spend with actual contract rates (changes CPE materially)
+2. Add tier-adjusted benchmarks (sharpens leaderboard precision)
+3. Connect Twitch + X impression data (multi-platform reach view)
+4. Build a geo-holdout for Q1 2025 (true incrementality)
+5. Run comment sentiment analysis (VADER) to qualify QEI further
+6. Automate the full pipeline with GitHub Actions on a weekly refresh cadence
+
+---
+
+*End of METHODOLOGY.md*
