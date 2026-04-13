@@ -6,7 +6,7 @@
 
 ---
 
-# STAGE 1 -- Data Collection via YouTube Data API v3
+# STAGE 1 : Data Collection via YouTube Data API v3
 
 ## Why This Data Source?
 
@@ -33,7 +33,7 @@ Using the YouTube Data API v3 is the strongest possible choice because:
 
 ---
 
-## API Call 1 -- Discover Creator Channels
+## API Call 1 : Discover Creator Channels
 
 Endpoint: GET https://www.googleapis.com/youtube/v3/search
 Parameters: q="valorant gameplay", type=channel, maxResults=20, order=relevance
@@ -45,7 +45,7 @@ Quota cost: 100 units
 
 ---
 
-## API Call 2 -- Channel Statistics
+## API Call 2 : Channel Statistics
 
 Endpoint: GET https://www.googleapis.com/youtube/v3/channels
 Parameters: part=snippet,statistics, id=[comma-separated channel IDs]
@@ -64,7 +64,7 @@ Quota cost: 8 units (1 per channel batch)
 
 ---
 
-## API Call 3 -- Video Search Per Creator
+## API Call 3 : Video Search Per Creator
 
 Endpoint: GET https://www.googleapis.com/youtube/v3/search
 Parameters: channelId={id}, publishedAfter=2024-10-01T00:00:00Z,
@@ -77,7 +77,7 @@ Quota cost: 100 units per call, 600 total for 6 creators
 
 ---
 
-## API Call 4 -- Video Statistics
+## API Call 4 : Video Statistics
 
 Endpoint: GET https://www.googleapis.com/youtube/v3/videos
 Parameters: part=statistics,contentDetails, id={comma-separated video IDs}
@@ -111,7 +111,7 @@ No cost incurred. Free tier is more than sufficient.
 
 ---
 
-## Stage 1 -- Limitations to Disclose
+## Stage 1 : Limitations to Disclose
 
 1. Sampled 10 videos per creator per search -- not every video published. A production pipeline
    would paginate and store all video IDs.
@@ -124,7 +124,7 @@ No cost incurred. Free tier is more than sufficient.
 
 ---
 
-# STAGE 2 -- Measurement Framework & Feature Engineering
+# STAGE 2 : Measurement Framework & Feature Engineering
 
 ## The 3-Layer Framework
 
@@ -228,7 +228,7 @@ Generates:
 
 ---
 
-# STAGE 3 -- Analysis Dashboard
+# STAGE 3 : Analysis Dashboard
 
 notebooks/03_analysis_dashboard.ipynb covers four Plotly charts:
 
@@ -239,7 +239,7 @@ notebooks/03_analysis_dashboard.ipynb covers four Plotly charts:
 
 ---
 
-# STAGE 4 -- QBR Deck
+# STAGE 4 : QBR Deck
 
 6-slide PPTX (outputs/VALORANT_Creator_QBR_Q3Q4_2024.pptx):
 - Slide 1: Title + Q4 KPI scorecard
@@ -253,7 +253,7 @@ VALORANT brand palette: 0F1923 (dark), FF4655 (red), 00D4FF (blue), FFE033 (yell
 
 ---
 
-# STAGE 5 -- Executive Summary
+# STAGE 5 : Executive Summary
 
 DOCX (outputs/Executive_Summary.docx) covers:
 - Program scorecard with explicit "MODELLED" flags on CPE/spend rows
@@ -265,7 +265,7 @@ DOCX (outputs/Executive_Summary.docx) covers:
 
 ---
 
-# STAGE 6 -- Known Limitations & Honest Assessment
+# STAGE 6 : Known Limitations & Honest Assessment
 
 This section documents what the analysis can and cannot claim. Being explicit about methodology
 gaps is a mark of senior analytical thinking.
