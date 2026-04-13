@@ -8,8 +8,7 @@
 
 ## How to Use This Document
 This file documents every decision, API call, transformation, and assumption made in this project
-in enough detail that you can replicate each step manually, explain it in an interview, or hand
-it to a teammate. Each stage ends with a "How to Replicate" section.
+in enough detail that can be replicated or hand it to a teammate. Each stage ends with a "How to Replicate" section.
 
 ---
 
@@ -17,14 +16,12 @@ it to a teammate. Each stage ends with a "How to Replicate" section.
 
 ## Why This Data Source?
 
-The assessment asks for data from a "legitimate source" and lists platform APIs as the top example.
 Using the YouTube Data API v3 is the strongest possible choice because:
 
 - It is the primary, authoritative source -- not a third-party scrape or aggregator
 - Every number is directly reproducible by anyone with an API key
 - It gives us video-level granularity: views, likes, comments, publish date, duration per video
 - It is free (10,000 quota units/day -- more than enough for this analysis)
-- It shows resourcefulness: you went to the source, not to a pre-packaged dataset
 
 ## Why VALORANT?
 
@@ -268,38 +265,3 @@ Page 1: Purpose, Q4 KPI snapshot, market context, creator performance table
 Page 2: Measurement framework, key findings, Q1 recommendations, "what next"
 
 ---
-
-# ARCHITECTURE DECISIONS -- Interview Q&A
-
-## Why YouTube API v3 and not a third-party tool?
-
-The assessment values "legitimate sources" and lists platform APIs first. YouTube API v3 is the
-authoritative, reproducible, free source. Any interviewer can copy the URL and get the same result.
-
-## Why Google Trends as the contextual layer?
-
-Free and publicly available. Explains macro-level shifts outside creator control. Without it,
-you'd penalise creators for a 44% Q4 category headwind they had no ability to influence.
-
-## Why model spend with benchmarks?
-
-A CPE analysis with no spend data is incomplete. Using benchmarks allows the analysis to
-demonstrate the methodology. Flagging it as modelled is critical for any real budget decision.
-
-## Why normalize TenZ's Q3 ER instead of excluding him?
-
-Excluding TenZ entirely gives a false picture. Normalizing (removing one viral video) allows
-comparison of his genuine content performance across the two quarters. The viral video is a
-separate event, not a reliable baseline for branded content output.
-
-## What would you do with a real budget?
-
-1. Connect real spend data (contract invoices)
-2. Add Twitch and Twitter/X signals for multi-platform reach
-3. Run comment sentiment analysis (VADER)
-4. Build a Q1 ER forecast per creator using linear regression
-5. Automate the pipeline end-to-end with GitHub Actions
-
----
-
-*End of METHODOLOGY.md*
