@@ -14,7 +14,7 @@ A fully reproducible, end-to-end creator measurement workspace that answers a si
 
 > **Which VALORANT YouTube creators delivered the best ROI in Q4 2024, and what should we do differently in Q1 2025?**
 
-It covers every layer of the assessment rubric: real API data pull, a 3-tier measurement framework, feature-engineered analytics, incrementality modelling, a QBR-ready PPTX deck, an executive summary, a Google Sheets dashboard, and a reusable playbook.
+It covers every layer of the assessment rubric: real API data pull, a 3-tier measurement framework, feature-engineered analytics, incrementality modelling, a QBR-ready PPTX deck, and an executive summary.
 
 ---
 
@@ -67,13 +67,11 @@ hardscope-assessment/
 │
 ├── outputs/
 │   ├── VALORANT_Creator_QBR_Q3Q4_2024.pptx      # 6-slide QBR deck (includes Methodology slide)
-│   ├── Executive_Summary.docx                    # 2-page exec summary (MODELLED flags on CPE)
-│   └── VALORANT_Creator_QBR_Dashboard.xlsx       # 5-tab Google Sheets / Excel dashboard
+│   └── Executive_Summary.docx                    # 2-page exec summary (MODELLED flags on CPE)
 │
 ├── fetch_trends.py       # Google Trends pull script (run locally)
 ├── run_pipeline.py       # Single-command measurement pipeline
-├── METHODOLOGY.md        # Full replication guide, every decision documented
-├── PLAYBOOK.md           # Reusable measurement framework template
+├── submit.bat            # Submission script
 └── README.md             # This file
 ```
 
@@ -245,33 +243,11 @@ The framework flags four conditions automatically (see `data/modeled/flagging_al
 
 | File | Description |
 |------|-------------|
-| `outputs/VALORANT_Creator_QBR_Dashboard.xlsx` | **5-tab interactive dashboard** (Google Sheets / Excel) |
 | `outputs/VALORANT_Creator_QBR_Q3Q4_2024.pptx` | 6-slide QBR deck (incl. Methodology & Limitations slide) |
 | `outputs/Executive_Summary.docx` | 2-page narrative for CMO/VP (MODELLED flags on CPE) |
 | `data/modeled/creator_campaign_metrics.csv` | Master analytics table, 21 cols, 14 rows |
 | `data/modeled/incrementality_q3_q4.csv` | Q3→Q4 delta analysis |
 | `data/modeled/flagging_alerts.csv` | Auto-flagged performance issues |
-
-### Opening the Dashboard in Google Sheets
-
-```
-1. Download VALORANT_Creator_QBR_Dashboard.xlsx from this repo
-2. Go to sheets.google.com → File → Import → Upload the .xlsx file
-3. Select "Replace spreadsheet" → Import data
-4. The file opens with 5 tabs, auto-filters, and embedded charts
-```
-
-> Alternatively, open directly in Excel — all tabs and charts are fully functional.
-
-### Dashboard Tabs
-
-| Tab | Contents |
-|-----|----------|
-| 📊 Dashboard | Program KPI scorecards, 3-layer funnel actuals, Q1 budget reallocation |
-| 🏆 Leaderboard | Sortable creator table (auto-filter on all 15 columns) + Q3/Q4 ER chart |
-| 📈 ER Trend | Monthly ER by creator table + trend line chart (4 key creators vs benchmark) |
-| ⚡ Incrementality | Q3→Q4 period-over-period delta table + ΔER waterfall bar chart |
-| 🚨 Alerts | All 20 automated flags with severity coding + alert summary |
 
 ---
 
@@ -303,8 +279,6 @@ The framework flags four conditions automatically (see `data/modeled/flagging_al
 - [x] `fetch_trends.py` documented and runnable locally
 - [x] YouTube API pull instructions in `notebooks/01_data_collection.ipynb`
 - [x] All transformations in notebook cells
-- [x] `METHODOLOGY.md` documents every decision with "How to Replicate" sections
-- [x] `PLAYBOOK.md` provides a brand-agnostic template for reuse
 - [x] Outputs regenerate cleanly from raw data with `jupyter nbconvert --execute`
 
 ---
@@ -317,9 +291,7 @@ numpy>=1.21
 jupyter
 plotly>=5.0
 pytrends>=4.9
-openpyxl>=3.1 (for Dashboard xlsx generation)
 python-docx (for Executive_Summary.docx generation)
-pptxgenjs (Node.js, for PPTX deck — see outputs/)
 ```
 
 ---
