@@ -38,20 +38,27 @@ jupyter notebook notebooks/02_measurement_framework.ipynb
 jupyter notebook notebooks/03_analysis_dashboard.ipynb
 ```
 
-> **Note:** The `data/raw/` folder already has the real YouTube API data and Google Trends averages I pulled for this assessment. You can set `REFRESH_DATA = True` in the notebooks if you want to pull live data again.
-
 ---
 
 ## Visual Summary
 
+### Q4 Program KPI Scorecard
+![Program KPI Summary](assets/kpi_summary.png)
+
 ### Q4 Engagement Leaderboard
-![Q4 Creator Engagement Leaderboard](assets/leaderboard_plotly.png)
+![Creator Engagement Leaderboard](assets/leaderboard_engagement.png)
+
+### Performance Matrix: Views vs Engagement
+![Views vs Engagement](assets/views_vs_er.png)
 
 ### Incrementality: Q3 to Q4 Performance Change
-![Incrementality: Q3 to Q4 ER Change](assets/incrementality_plotly.png)
+![Q3 to Q4 Incrementality](assets/q3_q4_incrementality.png)
 
 ### Market Context: Category Trend
-![VALORANT Category Search Interest](assets/category_trend_plotly.png)
+![VALORANT Search Interest Trend](assets/search_interest_trend.png)
+
+### Efficiency: CPE Analysis
+![CPE Efficiency](assets/cpe_efficiency.png)
 
 ---
 
@@ -61,9 +68,12 @@ jupyter notebook notebooks/03_analysis_dashboard.ipynb
 hardscope-assessment/
 │
 ├── assets/                     # High-quality visualization outputs
-│   ├── leaderboard_plotly.png
-│   ├── incrementality_plotly.png
-│   └── category_trend_plotly.png
+│   ├── kpi_summary.png
+│   ├── leaderboard_engagement.png
+│   ├── views_vs_er.png
+│   ├── q3_q4_incrementality.png
+│   ├── search_interest_trend.png
+│   └── cpe_efficiency.png
 │
 ├── data/
 │   ├── raw/

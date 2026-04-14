@@ -10,6 +10,8 @@ April 13, 2026
 ## 1. Program Scorecard: Q4 2024
 The big wins and the market reality.
 
+![Program KPI Summary](../assets/kpi_summary.png)
+
 | Metric | Q4 Value | Note |
 | :--- | :--- | :--- |
 | **Total Q4 Views** | **7,343,373** | Real YouTube API Data |
@@ -25,7 +27,7 @@ The big wins and the market reality.
 ## 2. Creator Leaderboard: Q4 ROI
 Ranked by Engagement Rate and ROI efficiency.
 
-![Q4 Creator Engagement Leaderboard](../assets/leaderboard_plotly.png)
+![Creator Engagement Leaderboard](../assets/leaderboard_engagement.png)
 
 | Rank | Creator | Q4 ER | Q3→Q4 ΔER | CPE (Est.) | Action |
 | :--- | :---: | :---: | :---: | :---: | :--- |
@@ -43,7 +45,7 @@ Ranked by Engagement Rate and ROI efficiency.
 ## 3. Market Context: The "Category Headwind"
 Why the blended ER is below benchmark.
 
-![VALORANT Category Search Interest](../assets/category_trend_plotly.png)
+![VALORANT Search Interest Trend](../assets/search_interest_trend.png)
 
 *   **Google Trends Signal:** VALORANT search interest dropped 44% from Q3 to Q4.
 *   **The August Peak:** Search interest hit 77.2 during VCT Champions Seoul.
@@ -63,7 +65,7 @@ Data transparency on our reach leader.
 ## 5. ROI Spotlight: Incrementality
 Addressing performance shifts across the roster.
 
-![Incrementality: Q3 to Q4 ER Change](../assets/incrementality_plotly.png)
+![Q3 to Q4 Incrementality](../assets/q3_q4_incrementality.png)
 
 *   **Positive Lift:** Only tarik showed positive incrementality in Q4.
 *   **The Decision:** We recommend pausing aceu's contract and reallocating that budget to tarik, where the engagement is both growing and more affordable.
@@ -72,6 +74,8 @@ Addressing performance shifts across the roster.
 
 ## 6. Q1 2025: Recommended Budget Shifts
 Actionable moves for the next quarter.
+
+![CPE Efficiency](../assets/cpe_efficiency.png)
 
 | Action | Creator | Rationale |
 | :--- | :--- | :--- |
