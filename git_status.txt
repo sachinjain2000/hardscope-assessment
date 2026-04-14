@@ -1,6 +1,0 @@
-M  METHODOLOGY.md
-M  outputs/Executive_Summary.docx
-M  outputs/VALORANT_Creator_QBR_Q3Q4_2024.pptx
-A  push_to_github.bat
-M  run_pipeline.py
-?? git_status.txt
