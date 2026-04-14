@@ -1,7 +1,6 @@
 # VALORANT Creator Campaign Measurement Workspace
 ### HardScope Assessment — Lead Analyst, Creator Strategy & ROI
 
-**Author:** Sachin Jain · [sachinjn200@gmail.com](mailto:sachinjn200@gmail.com)  
 **Brand:** Riot Games / VALORANT  
 **Campaign Period:** Q3 2024 (Jul–Sep) + Q4 2024 (Oct–Dec)  
 **Submitted:** April 2026
@@ -70,7 +69,6 @@ hardscope-assessment/
 │   └── Executive_Summary.docx                    # 2-page exec summary (MODELLED flags on CPE)
 │
 ├── fetch_trends.py       # Google Trends pull script (run locally)
-├── run_pipeline.py       # Single-command measurement pipeline
 ├── submit.bat            # Submission script
 └── README.md             # This file
 ```
