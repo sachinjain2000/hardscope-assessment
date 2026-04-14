@@ -25,7 +25,7 @@ git clone https://github.com/sachinjain2000/hardscope-assessment.git
 cd hardscope-assessment
 
 # 2. Install Python dependencies
-pip install pandas numpy jupyter pytrends matplotlib seaborn
+pip install pandas numpy jupyter pytrends plotly kaleido
 
 # 3. (Optional) Re-pull Google Trends data
 #    Run from the project root:
@@ -45,13 +45,13 @@ jupyter notebook notebooks/03_analysis_dashboard.ipynb
 ## Visual Summary
 
 ### Q4 Engagement Leaderboard
-![Q4 Creator Engagement Leaderboard](assets/leaderboard.png)
+![Q4 Creator Engagement Leaderboard](assets/leaderboard_plotly.png)
 
 ### Incrementality: Q3 to Q4 Performance Change
-![Incrementality: Q3 to Q4 ER Change](assets/incrementality.png)
+![Incrementality: Q3 to Q4 ER Change](assets/incrementality_plotly.png)
 
 ### Market Context: Category Trend
-![VALORANT Category Search Interest](assets/category_trend.png)
+![VALORANT Category Search Interest](assets/category_trend_plotly.png)
 
 ---
 
@@ -60,10 +60,10 @@ jupyter notebook notebooks/03_analysis_dashboard.ipynb
 ```
 hardscope-assessment/
 │
-├── assets/                     # Visualization outputs for documentation
-│   ├── leaderboard.png
-│   ├── incrementality.png
-│   └── category_trend.png
+├── assets/                     # High-quality visualization outputs
+│   ├── leaderboard_plotly.png
+│   ├── incrementality_plotly.png
+│   └── category_trend_plotly.png
 │
 ├── data/
 │   ├── raw/
@@ -80,14 +80,13 @@ hardscope-assessment/
 ├── notebooks/
 │   ├── 01_data_collection.ipynb        # YouTube API pull and validation
 │   ├── 02_measurement_framework.ipynb  # Feature engineering and modeling
-│   └── 03_analysis_dashboard.ipynb     # Charts and trend analysis
+│   └── 03_analysis_dashboard.ipynb     # Charts and trend analysis (Executed)
 │
 ├── outputs/
 │   ├── EXECUTIVE_SUMMARY.md             # 2 page executive summary
 │   └── QBR_DECK.md                      # 6 slide QBR deck
 │
 ├── fetch_trends.py       # Google Trends pull script
-├── submit.bat            # Submission script
 └── README.md             # This file
 ```
 
