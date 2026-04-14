@@ -25,6 +25,8 @@ The big wins and the market reality.
 ## 2. Creator Leaderboard: Q4 ROI
 Ranked by Engagement Rate and ROI efficiency.
 
+![Q4 Creator Engagement Leaderboard](../assets/leaderboard.png)
+
 | Rank | Creator | Q4 ER | Q3→Q4 ΔER | CPE (Est.) | Action |
 | :--- | :---: | :---: | :---: | :---: | :--- |
 | 1 | **tarik** | 4.45% | +1.14pp ✅ | $0.20 | **SCALE +20%** |
@@ -41,6 +43,8 @@ Ranked by Engagement Rate and ROI efficiency.
 ## 3. Market Context: The "Category Headwind"
 Why the blended ER is below benchmark.
 
+![VALORANT Category Search Interest](../assets/category_trend.png)
+
 *   **Google Trends Signal:** VALORANT search interest dropped 44% from Q3 to Q4.
 *   **The August Peak:** Search interest hit 77.2 during VCT Champions Seoul.
 *   **The Interpretation:** The program didn't "fail" to meet the 3.87% benchmark; rather, the entire category lost momentum. Our creators held on better than the market average.
@@ -56,12 +60,13 @@ Data transparency on our reach leader.
 
 ---
 
-## 5. ROI Spotlight: aceu
-Addressing the structural underperformer.
+## 5. ROI Spotlight: Incrementality
+Addressing performance shifts across the roster.
 
-*   **The CPE Problem:** At an estimated $2.42 per engagement, aceu is 14 times the "efficient" ceiling.
-*   **The Fit Issue:** Despite 1.8M subscribers, his 2.79% ER is declining and below his tier's expected floor.
-*   **The Decision:** We recommend pausing his contract and reallocating that budget to tarik, where the engagement is both growing and more affordable.
+![Incrementality: Q3 to Q4 ER Change](../assets/incrementality.png)
+
+*   **Positive Lift:** Only tarik showed positive incrementality in Q4.
+*   **The Decision:** We recommend pausing aceu's contract and reallocating that budget to tarik, where the engagement is both growing and more affordable.
 
 ---
 

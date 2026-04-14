@@ -25,7 +25,7 @@ git clone https://github.com/sachinjain2000/hardscope-assessment.git
 cd hardscope-assessment
 
 # 2. Install Python dependencies
-pip install pandas numpy jupyter pytrends
+pip install pandas numpy jupyter pytrends matplotlib seaborn
 
 # 3. (Optional) Re-pull Google Trends data
 #    Run from the project root:
@@ -42,10 +42,28 @@ jupyter notebook notebooks/03_analysis_dashboard.ipynb
 
 ---
 
+## Visual Summary
+
+### Q4 Engagement Leaderboard
+![Q4 Creator Engagement Leaderboard](assets/leaderboard.png)
+
+### Incrementality: Q3 to Q4 Performance Change
+![Incrementality: Q3 to Q4 ER Change](assets/incrementality.png)
+
+### Market Context: Category Trend
+![VALORANT Category Search Interest](assets/category_trend.png)
+
+---
+
 ## Project Structure
 
 ```
 hardscope-assessment/
+│
+├── assets/                     # Visualization outputs for documentation
+│   ├── leaderboard.png
+│   ├── incrementality.png
+│   └── category_trend.png
 │
 ├── data/
 │   ├── raw/
@@ -65,8 +83,8 @@ hardscope-assessment/
 │   └── 03_analysis_dashboard.ipynb     # Charts and trend analysis
 │
 ├── outputs/
-│   ├── VALORANT_Creator_QBR_Q3Q4_2024.pptx      # 6 slide QBR deck
-│   └── Executive_Summary.docx                    # 2 page executive summary
+│   ├── EXECUTIVE_SUMMARY.md             # 2 page executive summary
+│   └── QBR_DECK.md                      # 6 slide QBR deck
 │
 ├── fetch_trends.py       # Google Trends pull script
 ├── submit.bat            # Submission script
