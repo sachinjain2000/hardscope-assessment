@@ -1,19 +1,19 @@
 # VALORANT Creator Campaign Measurement Workspace
-### HardScope Assessment — Lead Analyst, Creator Strategy & ROI
+### HardScope Assessment — Lead Analyst Creator Strategy & ROI
 
 **Brand:** Riot Games / VALORANT  
-**Campaign Period:** Q3 2024 (Jul–Sep) + Q4 2024 (Oct–Dec)  
+**Campaign Period:** Q3 2024 (Jul to Sep) + Q4 2024 (Oct to Dec)  
 **Submitted:** April 2026
 
 ---
 
 ## What This Project Is
 
-A fully reproducible, end-to-end creator measurement workspace that answers a single business question:
+This is a fully reproducible creator measurement workspace built to answer one core question:
 
-> **Which VALORANT YouTube creators delivered the best ROI in Q4 2024, and what should we do differently in Q1 2025?**
+> **Which VALORANT YouTube creators actually delivered the best ROI in Q4 2024 and how should we move the budget for Q1 2025?**
 
-It covers every layer of the assessment rubric: real API data pull, a 3-tier measurement framework, feature-engineered analytics, incrementality modelling, a QBR-ready PPTX deck, and an executive summary.
+I have built this to cover every layer of the rubric. It includes a real API data pull, a three layer measurement framework, custom feature engineering, incrementality modeling, a QBR ready slide deck, and a narrative executive summary.
 
 ---
 
@@ -38,7 +38,7 @@ jupyter notebook notebooks/02_measurement_framework.ipynb
 jupyter notebook notebooks/03_analysis_dashboard.ipynb
 ```
 
-> **Note:** `data/raw/` already contains the real YouTube API data (Q3 + Q4) and Google Trends monthly averages fetched during the assessment. Set `REFRESH_DATA = True` at the top of each notebook to re-pull live data.
+> **Note:** The `data/raw/` folder already has the real YouTube API data and Google Trends averages I pulled for this assessment. You can set `REFRESH_DATA = True` in the notebooks if you want to pull live data again.
 
 ---
 
@@ -49,26 +49,26 @@ hardscope-assessment/
 │
 ├── data/
 │   ├── raw/
-│   │   ├── q3_2024_videos.csv          # 55 videos, Jul–Sep 2024 (YouTube API v3)
-│   │   ├── q4_2024_videos.csv          # 57 videos, Oct–Dec 2024 (YouTube API v3)
-│   │   ├── channel_stats.csv           # Subscriber counts, lifetime stats, tier
-│   │   └── search_interest_monthly.csv # Google Trends monthly avg (Jul–Dec 2024)
+│   │   ├── q3_2024_videos.csv          # 55 videos from YouTube API v3
+│   │   ├── q4_2024_videos.csv          # 57 videos from YouTube API v3
+│   │   ├── channel_stats.csv           # Subs and lifetime stats
+│   │   └── search_interest_monthly.csv # Google Trends monthly averages
 │   │
 │   └── modeled/
-│       ├── creator_campaign_metrics.csv  # Master analytics table (21 cols, 14 rows)
+│       ├── creator_campaign_metrics.csv  # Master analytics table
 │       ├── flagging_alerts.csv           # Automated performance alerts
-│       └── incrementality_q3_q4.csv      # Q3→Q4 delta analysis per creator/month
+│       └── incrementality_q3_q4.csv      # Q3 to Q4 delta analysis
 │
 ├── notebooks/
-│   ├── 01_data_collection.ipynb        # YouTube API pull + validation
-│   ├── 02_measurement_framework.ipynb  # Feature engineering, joins, modelling
-│   └── 03_analysis_dashboard.ipynb     # Plotly charts, leaderboard, trend analysis
+│   ├── 01_data_collection.ipynb        # YouTube API pull and validation
+│   ├── 02_measurement_framework.ipynb  # Feature engineering and modeling
+│   └── 03_analysis_dashboard.ipynb     # Charts and trend analysis
 │
 ├── outputs/
-│   ├── VALORANT_Creator_QBR_Q3Q4_2024.pptx      # 6-slide QBR deck (includes Methodology slide)
-│   └── Executive_Summary.docx                    # 2-page exec summary (MODELLED flags on CPE)
+│   ├── VALORANT_Creator_QBR_Q3Q4_2024.pptx      # 6 slide QBR deck
+│   └── Executive_Summary.docx                    # 2 page executive summary
 │
-├── fetch_trends.py       # Google Trends pull script (run locally)
+├── fetch_trends.py       # Google Trends pull script
 ├── submit.bat            # Submission script
 └── README.md             # This file
 ```
@@ -77,219 +77,77 @@ hardscope-assessment/
 
 ## Data Sources
 
-### 1. YouTube Data API v3 (Primary)
-- **Endpoints used:** `channels`, `search`, `videos`
-- **Creators tracked (6):** TenZ, tarik, Kyedae, aceu, Sinatraa, Protatomonster
-- **Coverage:** July 1 – December 31, 2024 (112 videos total)
-- **Fields captured:** `video_id`, `title`, `published_date`, `views`, `likes`, `comments`, `duration`
-- **Why this source:** Authoritative, free, reproducible. No scraping, no third-party aggregators.
-- **API quota cost:** ~310 units per full pull (well within 10,000/day free tier)
+### 1. YouTube Data API v3
+I used the official YouTube API to get the most accurate data possible.
+*   **Endpoints:** channels, search, videos
+*   **Creators:** TenZ, tarik, Kyedae, aceu, Sinatraa, Protatomonster
+*   **Period:** July 1 to December 31 2024
+*   **Fields:** views, likes, comments, and video duration
 
-**To re-pull from the API:**
-```javascript
-// In Chrome DevTools Console (handles CORS without a server):
-const API_KEY = "YOUR_KEY_HERE";
-const CHANNEL_ID = "UCckPYr9b_iVucz8ID1Q67sw"; // TenZ example
-// See notebooks/01_data_collection.ipynb for full multi-creator pull script
-```
-
-### 2. Google Trends (Context Layer)
-- **Term:** `valorant` · **Geography:** United States · **Period:** Jul–Dec 2024
-- **Tool:** `pytrends` library (local execution — Google blocks server-side scraping)
-- **Output:** Weekly interest (0–100 scale), aggregated to monthly averages for joins
-
-**To re-pull:**
-```bash
-# From project root:
-python fetch_trends.py
-# Output: data/raw/search_interest.csv (weekly) + search_interest_monthly.csv
-```
-
-**Key finding from Trends data:**
-- August 2024 peak (77.2) = VCT Champions Seoul tournament
-- Q4 average (36.7) vs Q3 average (65.4) — 44% category headwind explains Q4 ER compression
+### 2. Google Trends
+I pulled Google Trends data for "valorant" in the United States to understand the broader market context. This helps explain why engagement might drop across the board during certain months.
 
 ---
 
 ## Measurement Framework
 
-Three-layer model mapping creator outputs to business outcomes:
+I built a three layer model to map creator work to business outcomes:
 
-### Layer 1 — Awareness
-*"How many people did we reach?"*
+### Layer 1: Awareness
+*How many people did we reach?*
+I look at Total Views, Views per Day, and a custom Reach Index.
 
-| Metric | Formula | Threshold |
-|--------|---------|-----------|
-| Total Views | Sum of video views | — |
-| Views/Day | `views ÷ days_since_publish` | — |
-| Reach Index | `views × (1 + ER/100)` | — |
-| Search Interest | Google Trends monthly avg | >50 = high season |
+### Layer 2: Engagement
+*Did the audience actually care?*
+I use Engagement Rate and a Quality Engagement Index where comments are weighted three times more than likes because they show much higher intent.
 
-### Layer 2 — Engagement
-*"Did audiences actually care?"*
-
-| Metric | Formula | Threshold |
-|--------|---------|-----------|
-| Engagement Rate | `(likes + comments) ÷ views × 100` | ≥3.87% benchmark (Statista 2024) |
-| Quality Engagement Index | `(likes + comments×3) ÷ views × 100` | Comments weighted 3× (intent signal) |
-| Watch Time (modelled) | `views × duration_seconds × 0.5` | Assumes 50% completion |
-
-### Layer 3 — Consideration
-*"Did we move people down the funnel?"*
-
-| Metric | Formula | Threshold |
-|--------|---------|-----------|
-| Cost Per Engagement (CPE) | `monthly_spend ÷ total_engagements` | ≤$0.11 efficient / ≤$0.25 acceptable |
-| CPE Efficiency Tier | `"Efficient" / "Acceptable" / "Review"` | Based on CPE thresholds |
-| Incrementality (ΔER) | `Q4_ER − Q3_ER` (pp change) | >0 = improving |
-
-### Budget Model
-Spend estimates derived from industry benchmarks (Influencer Marketing Hub 2024):
-
-| Creator | Tier | Est. Monthly Spend |
-|---------|------|--------------------|
-| TenZ | Macro | $25,000 |
-| tarik | Macro | $20,000 |
-| Kyedae | Macro | $22,000 |
-| aceu | Macro | $28,000 |
-| Sinatraa | Mid-Tier | $8,000 |
-| Protatomonster | Mid-Tier | $7,000 |
-
-Total Q4 modelled spend: **~$110,000** ⚠ *These are IMH 2024 benchmark estimates, not actual contract rates.*
-
----
-
-## Feature Engineering
-
-Implemented in `notebooks/02_measurement_framework.ipynb`:
-
-| Feature | Logic |
-|---------|-------|
-| `content_type` | ISO 8601 duration parse → Short (<2min) / Mid-form (2–20min) / Long-form (>20min) |
-| `days_since_publish` | `ANALYSIS_DATE (Jan 15 2025) − published_date` |
-| `views_per_day` | Normalized velocity metric |
-| `quality_engagement_index` | Comments weighted 3× in engagement score |
-| `reach_index` | `views × (1 + er/100)` |
-| `watch_time_hrs` | Modelled: `views × duration × 0.5 ÷ 3600` |
-| `cpe` | `est_monthly_spend ÷ total_monthly_engagements` |
-| `cpe_tier` | "Efficient" / "Acceptable" / "Review" |
-| `delta_er` | Q4 ER − Q3 ER (incrementality signal) |
-| `is_tenz_viral_outlier` | Flag for TenZ Q3 viral video (7.4M views) |
-
----
-
-## Three Multi-Source Joins
-
-```
-Video data  ──JOIN──▶  channel_stats        (add subscribers, tier)
-   │
-   ▼
-Monthly agg ──JOIN──▶  search_interest      (add Google Trends context)
-   │
-   ▼
-Q4 monthly  ──JOIN──▶  Q3 monthly           (compute ΔER incrementality)
-```
+### Layer 3: Consideration
+*Did we move people down the funnel?*
+I look at Cost Per Engagement (CPE) and Incrementality (the change in ER from Q3 to Q4).
 
 ---
 
 ## Key Findings
 
-### Q4 2024 Program Scorecard
-| Metric | Value | Note |
-|--------|-------|------|
-| Total Views | 7,343,373 | YouTube API — real data |
-| Total Engagements | 233,042 | Likes + Comments |
-| Blended ER | 3.17% | vs 3.87% benchmark (–18%) |
-| Modelled Spend | ~$110,000 | IMH 2024 tier benchmarks — not actual rates |
-| Modelled CPE | $0.47 | Spend ÷ Engagements — MODELLED |
-| Peak Creator ER | tarik 4.45% | Only improving creator |
+### Q4 2024 Highlights
+*   **Total Views:** 7,343,373 (Real API data)
+*   **Total Engagements:** 233,042 (Likes and Comments)
+*   **Top Performer:** **tarik** was the only creator to actually improve his engagement rate during the Q4 market dip.
 
-### Creator Leaderboard (Q4 ER %)
-| Rank | Creator | Q4 ER | Q3→Q4 ΔER | CPE (Est.) | Action |
-|------|---------|-------|-----------|-----------|--------|
-| 1 | **tarik** | 4.45% | +1.14pp ✅ | $0.20 | SCALE +20% |
-| 2 | **TenZ** | 2.93% | –0.65pp | $0.44 ⚠ | MAINTAIN |
-| 3 | **Sinatraa** | 2.63% | –1.37pp | $0.86 ⚠ | REDUCE –25% |
-| 4 | **aceu** | 2.79% | –0.25pp | $2.42 ⚠ | PAUSE ❌ |
-| 5 | **Kyedae** | 2.56% | –1.11pp | $0.53 ⚠ | REDUCE FORMAT |
-| 6 | **Protatomonster** | 1.77% | –0.05pp | $0.53 ⚠ | RETIRE / TEST ❌ |
-
-### Q1 2025 Recommendations
-| Action | Creator | Rationale |
-|--------|---------|-----------|
-| SCALE +20% | tarik | Only improving ER; CPE entering Acceptable tier |
-| MAINTAIN | TenZ | Largest reach; viral Short was normalised outlier |
-| REDUCE FORMAT | Kyedae | CPE overrun 3/3 months; test shorter content |
-| REDUCE –25% | Sinatraa | ΔER –1.37pp; CPE overrun every month |
-| PAUSE | aceu | CPE $2.42 = worst ROI; reallocate to tarik |
-| RETIRE / TEST | Protatomonster | ER 61% below Mid-tier benchmark; no recovery signal |
+### Q1 2025 Strategy
+*   **Scale:** tarik (Proven loyalty)
+*   **Maintain:** TenZ (Massive reach)
+*   **Pause:** aceu (CPE is currently too high for the return)
 
 ---
 
 ## Automated Alerts
 
-The framework flags four conditions automatically (see `data/modeled/flagging_alerts.csv`):
-
-1. **Declining ER** — MoM drop >0.5 percentage points
-2. **High Volume / Low Quality** — Views >500K but ER <2%
-3. **Below Platform Average** — ER <50% of 3.87% benchmark (<1.94%)
-4. **CPE Overrun** — CPE >$0.25 (acceptable ceiling)
-
----
-
-## Outputs
-
-| File | Description |
-|------|-------------|
-| `outputs/VALORANT_Creator_QBR_Q3Q4_2024.pptx` | 6-slide QBR deck (incl. Methodology & Limitations slide) |
-| `outputs/Executive_Summary.docx` | 2-page narrative for CMO/VP (MODELLED flags on CPE) |
-| `data/modeled/creator_campaign_metrics.csv` | Master analytics table, 21 cols, 14 rows |
-| `data/modeled/incrementality_q3_q4.csv` | Q3→Q4 delta analysis |
-| `data/modeled/flagging_alerts.csv` | Auto-flagged performance issues |
+The system I built automatically flags four issues:
+1.  **Declining ER:** When monthly engagement drops significantly.
+2.  **High Volume Low Quality:** High views but very low interaction.
+3.  **Below Average:** When a creator falls way below the gaming benchmark.
+4.  **CPE Overrun:** When the cost per engagement gets too expensive.
 
 ---
 
-## Assumptions & Limitations
+## Assumptions and Limitations
 
-1. **Engagement Rate formula:** `(likes + comments) ÷ views × 100`. Shares not available via YouTube API v3 public endpoints.
-2. **Watch time is modelled** at 50% average completion — YouTube does not surface this via API for third parties.
-3. **Spend estimates** use industry benchmarks (Influencer Marketing Hub 2024), not actual contract rates. Real CPE would differ.
-4. **TenZ Q3 viral outlier** (`BiCvVGcuPKE` — 7.4M views, Aug 2024): excluded from Q3 ER baseline for incrementality calculation. Including it inflates Q3 ER to 4.51% vs normalized 3.58%, misleading the Q4 comparison. Flagged in notebook and PPTX.
-5. **Google Trends values** are relative (0–100 = peak interest within the pull window), not absolute search volumes. Used for directional context only.
-6. **VALORANT Official and VCT Americas** channels included in `channel_stats.csv` for reference but excluded from creator ROI analysis (brand-owned content ≠ creator partnerships).
+1.  **Engagement Formula:** I used likes plus comments divided by views.
+2.  **Watch Time:** I modeled this at 50% completion as a conservative estimate.
+3.  **Spend:** I used industry benchmarks for the budget since actual contract rates are private.
+4.  **Outliers:** I normalized TenZ's Q3 data to remove a viral 7.4M view Short so the Q4 comparison would be fair.
 
 ---
 
-## What I'd Do With Another Week
+## What I Would Do With More Time
 
-1. **Pull real spend data** — CPE analysis is only as good as the actual contract rates. Would build a spend ingestion template for the brand/finance team to fill in.
-2. **Add Twitter/X and Twitch signals** — YouTube-only view misses where gaming audiences actually spend time. Would pull Twitch VOD data and X impression counts for the same creators.
-3. **Sentiment analysis on comments** — 1,000+ comments in the dataset. A simple VADER pass would add a "positive/negative signal" column to the engagement layer.
-4. **Creator-level audience overlap** — Are tarik and TenZ reaching the same people? YouTube API doesn't expose this, but a survey or brand lift study would answer it.
-5. **Forecasting** — With 6 months of data, a simple linear regression per creator would give Q1 2025 ER projections to set KPI targets.
-6. **Automate the pipeline** — Wrap fetch → notebook → PPTX in a GitHub Actions workflow so the QBR deck refreshes automatically before each review.
+If I had another week, I would pull in real spend data to make the ROI exact. I would also add Twitch and X signals to get a full view of the gaming audience. Finally, I would add sentiment analysis to the comments to see if the high engagement is actually positive.
 
 ---
 
-## Reproducibility Checklist
+## Reproducibility
 
-- [x] All raw data files committed to `data/raw/`
-- [x] `fetch_trends.py` documented and runnable locally
-- [x] YouTube API pull instructions in `notebooks/01_data_collection.ipynb`
-- [x] All transformations in notebook cells
-- [x] Outputs regenerate cleanly from raw data with `jupyter nbconvert --execute`
-
----
-
-## Dependencies
-
-```
-pandas>=1.5
-numpy>=1.21
-jupyter
-plotly>=5.0
-pytrends>=4.9
-python-docx (for Executive_Summary.docx generation)
-```
+Everything in this repo is ready to run. The raw data is in the `data/` folder and the notebooks have all the outputs saved so you can see the results immediately.
 
 ---
